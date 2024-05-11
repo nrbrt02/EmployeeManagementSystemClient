@@ -191,7 +191,8 @@ public class EmployeeView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
-
+        AddEmployeeView view = new AddEmployeeView();
+        view.show();
     }//GEN-LAST:event_jPanel1MouseClicked
 
     private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
@@ -205,8 +206,7 @@ public class EmployeeView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jPanel3MouseClicked
 
     private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
-        AddEmployeeView view = new AddEmployeeView();
-        view.show();
+
     }//GEN-LAST:event_jPanel2MouseClicked
 
 
