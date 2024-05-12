@@ -37,9 +37,15 @@ public class DashboardView extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         DesktopPane = new javax.swing.JDesktopPane();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
@@ -68,7 +74,7 @@ public class DashboardView extends javax.swing.JFrame {
         jLabel1.setMaximumSize(new java.awt.Dimension(64, 64));
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
 
-        sidepan.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 106, 260, 46));
+        sidepan.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 260, 50));
 
         jLabel3.setBackground(new java.awt.Color(51, 51, 51));
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -92,7 +98,45 @@ public class DashboardView extends javax.swing.JFrame {
         jLabel5.setText("Employee Management");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 19, 172, -1));
 
-        sidepan.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 260, -1));
+        sidepan.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 260, 50));
+
+        jPanel5.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
+        });
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-user-group-24 (1).png"))); // NOI18N
+
+        jLabel10.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setText("Accounts");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel10))
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        sidepan.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, 260, 50));
 
         bg.add(sidepan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 750));
 
@@ -125,6 +169,25 @@ public class DashboardView extends javax.swing.JFrame {
 
         bg.add(DesktopPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, 1020, 650));
 
+        jPanel4.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel4MouseEntered(evt);
+            }
+        });
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setText("Home");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-home-32.png"))); // NOI18N
+        jLabel8.setMaximumSize(new java.awt.Dimension(64, 64));
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
+
+        bg.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 106, 260, 46));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,6 +215,16 @@ public class DashboardView extends javax.swing.JFrame {
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         dispose();
     }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jPanel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel4MouseEntered
+
+    private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
+        DesktopPane.removeAll();
+        AccountsView view = new AccountsView();
+        DesktopPane.add(view).setVisible(true);
+    }//GEN-LAST:event_jPanel5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -192,14 +265,20 @@ public class DashboardView extends javax.swing.JFrame {
     private javax.swing.JDesktopPane DesktopPane;
     private javax.swing.JPanel bg;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel sidepan;
     // End of variables declaration//GEN-END:variables

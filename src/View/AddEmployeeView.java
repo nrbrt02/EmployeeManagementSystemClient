@@ -14,7 +14,6 @@ import Services.PositionServices;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -22,16 +21,16 @@ import javax.swing.JOptionPane;
  *
  * @author ZIPTECH LTD
  */
-public class AddEmployeeView extends javax.swing.JFrame {
+public class AddEmployeeView extends javax.swing.JDialog {
 
     /**
-     * Creates new form AddEmployeeView
+     * Creates new form testingDialog
      */
-    public AddEmployeeView() {
+    public AddEmployeeView(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         fillposition();
         filldepartment();
-//        fillCountrcode();
     }
 
     /**
@@ -63,7 +62,7 @@ public class AddEmployeeView extends javax.swing.JFrame {
         departmentComb = new javax.swing.JComboBox<>();
         positionComb = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -80,7 +79,7 @@ public class AddEmployeeView extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(77, Short.MAX_VALUE)
+                .addContainerGap(137, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -190,7 +189,7 @@ public class AddEmployeeView extends javax.swing.JFrame {
                         .addComponent(phoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                         .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel10)
@@ -263,17 +262,7 @@ public class AddEmployeeView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-//    void fillCountrcode() {
-//        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-//        Set<Integer> regions = phoneUtil.getSupportedRegions();
-//        String[] countryCodes = new String[regions.size()];
-//        int i = 0;
-//        for (Integer regionCode : regions) {
-//            countryCodes[i++] = phoneUtil.getRegionCodeForNumber(regionCode).name();
-//            countryCode.addItem(countryCodes[i++]);
-//        }
-//    }
-    void filldepartment() {
+        void filldepartment() {
         try {
             Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
             DepartmentServices service = (DepartmentServices) theReg.lookup("department");
@@ -317,25 +306,25 @@ public class AddEmployeeView extends javax.swing.JFrame {
                 Employee employee = new Employee();
                 employee.setNames(names.getText());
                 employee.setEmail(email.getText());
-                
+
                 String thePhoneNumber = countryCode.getSelectedItem().toString()+phoneNumber.getText();
                 employee.setPhone(thePhoneNumber);
                 employee.setAddress(address.getText());
-                
+
                 Department dept = new Department();
                 String selectedDept = departmentComb.getSelectedItem().toString();
                 String[] parts = selectedDept.split("-");
                 dept.setName(parts[1]);
                 dept.setDepartmentId(Integer.parseInt(parts[0]));
                 employee.setTheDepartment(dept);
-                
+
                 Position post = new Position();
                 String selectedPost = positionComb.getSelectedItem().toString();
                 String[] parts1 = selectedPost.split("-");
                 post.setPositionId(Integer.parseInt(parts1[0]));
                 post.setTitle(parts1[1]);
                 employee.setThePosition(post);
-                
+
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 EmployeeService service = (EmployeeService) theReg.lookup("employee");
                 Employee employeeObj = service.saveEmployee(employee);
@@ -347,7 +336,7 @@ public class AddEmployeeView extends javax.swing.JFrame {
                     address.setText("");
                     departmentComb.setSelectedIndex(0);
                     positionComb.setSelectedIndex(0);
-//                    retriveAll();
+                    //                    retriveAll();
                 } else {
                     JOptionPane.showMessageDialog(this, "Something wrong");
                 }
@@ -378,11 +367,10 @@ public class AddEmployeeView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_addressActionPerformed
 
-    public static boolean isValidEmail(String email) {
+        public static boolean isValidEmail(String email) {
         String regex = "^[\\w!#$%&'*+/=?^`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?$";
         return Pattern.matches(regex, email);
     }
-
     /**
      * @param args the command line arguments
      */
@@ -409,11 +397,19 @@ public class AddEmployeeView extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(AddEmployeeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddEmployeeView().setVisible(true);
+                AddEmployeeView dialog = new AddEmployeeView(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

@@ -6,7 +6,9 @@
 package View;
 
 import Model.Department;
+import Model.Employee;
 import Services.DepartmentServices;
+import Services.EmployeeService;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
@@ -19,14 +21,16 @@ import javax.swing.table.TableRowSorter;
  *
  * @author ZIPTECH LTD
  */
-public class DepartmentView extends javax.swing.JFrame {
+public class DepartmentView extends javax.swing.JDialog {
 
     /**
-     * Creates new form Department
+     * Creates new form DepartmentView1
      */
-    public DepartmentView() {
+    public DepartmentView(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         retriveAll();
+        fillManager();
     }
 
     /**
@@ -58,8 +62,10 @@ public class DepartmentView extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        managerComb = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -163,14 +169,14 @@ public class DepartmentView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "#", "Name", "Description"
+                "#", "Name", "Description", "Manager"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, true, false
+                true, true, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -224,6 +230,11 @@ public class DepartmentView extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel9.setText("Name");
+
+        managerComb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select --" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -245,11 +256,13 @@ public class DepartmentView extends javax.swing.JFrame {
                         .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel9))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name)
-                            .addComponent(jScrollPane1))
+                            .addComponent(jScrollPane1)
+                            .addComponent(managerComb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(66, 66, 66)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -270,16 +283,22 @@ public class DepartmentView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel4)))
-                        .addGap(55, 55, 55)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(managerComb, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
                             .addComponent(jButton2)
@@ -305,6 +324,18 @@ public class DepartmentView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    void fillManager(){
+        try {
+            Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+            EmployeeService service = (EmployeeService) theReg.lookup("employee");
+            List<Employee> allEmployees = service.allEmployees();
+            for (Employee employee : allEmployees) {
+                managerComb.addItem(employee.getEmployeeId()+"-"+employee.getNames());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     void retriveAll() {
         DefaultTableModel tbModel = (DefaultTableModel) allDepartments.getModel();
         try {
@@ -316,8 +347,10 @@ public class DepartmentView extends javax.swing.JFrame {
                 Integer id = department.getDepartmentId();
                 String title = department.getName();
                 String desc = department.getDescription();
+                Employee emp = department.getDeptManager();
+                String manager = emp.getNames();
                 tbModel.addRow(new Object[]{
-                    id, title, desc,});
+                    id, title, desc, manager,});
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -334,11 +367,20 @@ public class DepartmentView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "There is a selected row");
         } else if (name.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Name can not be Empty");
+        } else if (managerComb.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Select Manager");
         } else {
             try {
                 Department Department = new Department();
                 Department.setName(name.getText());
                 Department.setDescription(desc.getText());
+                
+                Employee emp = new Employee();
+                String selectedItem = managerComb.getSelectedItem().toString();
+                String[] parts = selectedItem.split("-");
+                emp.setEmployeeId(Integer.parseInt(parts[0]));
+                Department.setDeptManager(emp);
+                
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 DepartmentServices service = (DepartmentServices) theReg.lookup("department");
                 Department DepartmentObj = service.saveDepartment(Department);
@@ -468,10 +510,17 @@ public class DepartmentView extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DepartmentView().setVisible(true);
+                DepartmentView dialog = new DepartmentView(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -491,10 +540,12 @@ public class DepartmentView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JComboBox<String> managerComb;
     private javax.swing.JTextField name;
     private javax.swing.JTextField search;
     // End of variables declaration//GEN-END:variables
