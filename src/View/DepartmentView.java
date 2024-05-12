@@ -132,7 +132,7 @@ public class DepartmentView extends javax.swing.JDialog {
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Name");
+        jLabel3.setText("Manager");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Description:");
@@ -324,18 +324,19 @@ public class DepartmentView extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void fillManager(){
+    void fillManager() {
         try {
             Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
             EmployeeService service = (EmployeeService) theReg.lookup("employee");
             List<Employee> allEmployees = service.allEmployees();
             for (Employee employee : allEmployees) {
-                managerComb.addItem(employee.getEmployeeId()+"-"+employee.getNames());
+                managerComb.addItem(employee.getEmployeeId() + "-" + employee.getNames());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     void retriveAll() {
         DefaultTableModel tbModel = (DefaultTableModel) allDepartments.getModel();
         try {
@@ -374,13 +375,13 @@ public class DepartmentView extends javax.swing.JDialog {
                 Department Department = new Department();
                 Department.setName(name.getText());
                 Department.setDescription(desc.getText());
-                
+
                 Employee emp = new Employee();
                 String selectedItem = managerComb.getSelectedItem().toString();
                 String[] parts = selectedItem.split("-");
                 emp.setEmployeeId(Integer.parseInt(parts[0]));
                 Department.setDeptManager(emp);
-                
+
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 DepartmentServices service = (DepartmentServices) theReg.lookup("department");
                 Department DepartmentObj = service.saveDepartment(Department);
@@ -388,6 +389,7 @@ public class DepartmentView extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "Department Added");
                     name.setText("");
                     desc.setText("");
+                    managerComb.setSelectedIndex(0);
                     retriveAll();
                 } else {
                     JOptionPane.showMessageDialog(this, "Something wrong");
@@ -426,6 +428,8 @@ public class DepartmentView extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Select A row to Update first");
         } else if (name.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Title can not be Empty");
+        } else if (managerComb.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "Select Manager");
         } else {
             try {
                 int selectedRow = allDepartments.getSelectedRow();
@@ -434,6 +438,13 @@ public class DepartmentView extends javax.swing.JDialog {
                 Department.setDepartmentId(Integer.parseInt(tbModel.getValueAt(selectedRow, 0).toString()));
                 Department.setName(name.getText());
                 Department.setDescription(desc.getText());
+
+                Employee emp = new Employee();
+                String selectedItem = managerComb.getSelectedItem().toString();
+                String[] parts = selectedItem.split("-");
+                emp.setEmployeeId(Integer.parseInt(parts[0]));
+                Department.setDeptManager(emp);
+
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 DepartmentServices service = (DepartmentServices) theReg.lookup("department");
                 Department DepartmentObj = service.updateDepartment(Department);
@@ -441,6 +452,7 @@ public class DepartmentView extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "Department Updated");
                     name.setText("");
                     desc.setText("");
+                    managerComb.setSelectedIndex(0);
                     retriveAll();
                 } else {
                     JOptionPane.showMessageDialog(this, "Something Wrong");
@@ -470,6 +482,7 @@ public class DepartmentView extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(this, "Department Deleted");
                     name.setText("");
                     desc.setText("");
+                    managerComb.setSelectedIndex(0);
                     retriveAll();
                 } else {
                     JOptionPane.showMessageDialog(this, "Something Wrong");

@@ -16,20 +16,30 @@ public class Account implements Serializable{
     private Integer accountId;
     private String password;
     private boolean status;
+    private String permisions;
     private Employee theEmployee;
 
     public Account() {
     }
 
-    public Account(Integer accountId, String password, boolean status, Employee theEmployee) {
+    public Account(Integer accountId, String password, boolean status, String permisions, Employee theEmployee) {
         this.accountId = accountId;
         this.password = password;
         this.status = status;
+        this.permisions = permisions;
         this.theEmployee = theEmployee;
     }
 
     public Integer getAccountId() {
         return accountId;
+    }
+
+    public String getPermisions() {
+        return permisions;
+    }
+
+    public void setPermisions(String permisions) {
+        this.permisions = permisions;
     }
 
     public void setAccountId(Integer accountId) {

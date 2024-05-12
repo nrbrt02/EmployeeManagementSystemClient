@@ -170,18 +170,15 @@ public class AccountsView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
-        AddEmployeeView view = new AddEmployeeView();
-        view.show();
+        new CreateAccountView(null, true).show();
     }//GEN-LAST:event_jPanel1MouseClicked
 
     private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
-        AllEmployeeView view = new AllEmployeeView();
-        view.show();
+        new AllAccounts(null, true).show();
     }//GEN-LAST:event_jPanel2MouseClicked
 
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
-        DepartmentView view = new DepartmentView();
-        view.show();
+        new changePasswordsView(null, true).show();
     }//GEN-LAST:event_jPanel3MouseClicked
 
 
