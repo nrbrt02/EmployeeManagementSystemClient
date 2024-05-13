@@ -9,10 +9,16 @@ import Model.Account;
 import Model.Employee;
 import Services.AccountServices;
 import Services.EmployeeService;
+import java.math.BigInteger;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 import java.util.List;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.swing.JOptionPane;
+import java.security.*;
 
 /**
  *
@@ -237,7 +243,7 @@ public class CreateAccountView extends javax.swing.JDialog {
             try {
 
                 Employee employee = new Employee();
-                Integer empId = Integer.parseInt(employeeInfo.getText());
+                Integer empId = Integer.parseInt(searchEmp.getText());
                 employee.setEmployeeId(empId);
 
                 Account account = new Account();
@@ -248,38 +254,18 @@ public class CreateAccountView extends javax.swing.JDialog {
                     account.setStatus(false);
                 }
                 account.setPermisions(permissionComb.getSelectedItem().toString());
-
-                String thePhoneNumber = countryCode.getSelectedItem().toString() + phoneNumber.getText();
-                employee.setPhone(thePhoneNumber);
-                employee.setAddress(employee.getText());
-
-                Department dept = new Department();
-                String selectedDept = departmentComb.getSelectedItem().toString();
-                String[] parts = selectedDept.split("-");
-                dept.setName(parts[1]);
-                dept.setDepartmentId(Integer.parseInt(parts[0]));
-                employee.setTheDepartment(dept);
-
-                Position post = new Position();
-                String selectedPost = positionComb.getSelectedItem().toString();
-                String[] parts1 = selectedPost.split("-");
-                post.setPositionId(Integer.parseInt(parts1[0]));
-                post.setTitle(parts1[1]);
-                employee.setThePosition(post);
-
+                account.setPassword(hasPassword("password123"));
+                
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
-                EmployeeService service = (EmployeeService) theReg.lookup("employee");
-                Employee employeeObj = service.saveEmployee(employee);
+                AccountServices service = (AccountServices) theReg.lookup("accounts");
+                Account accountObj = service.saveAccount(account);
 
-                if (employeeObj != null) {
-                    JOptionPane.showMessageDialog(this, "Employee Added");
-                    names.setText("");
+                if (accountObj != null) {
+                    JOptionPane.showMessageDialog(this, "Account Created");
                     searchEmp.setText("");
-                    phoneNumber.setText("");
-                    employee.setText("");
-                    departmentComb.setSelectedIndex(0);
-                    positionComb.setSelectedIndex(0);
-                    //                    retriveAll();
+                    employeeInfo.setText("");
+                    status.setSelected(false);
+                    permissionComb.setSelectedIndex(0);
                 } else {
                     JOptionPane.showMessageDialog(this, "Something wrong");
                 }
@@ -338,6 +324,24 @@ public class CreateAccountView extends javax.swing.JDialog {
 
         }
     }//GEN-LAST:event_submitSearchActionPerformed
+
+    public String hasPassword(String pass) throws NoSuchAlgorithmException {
+        try {
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[16];
+            random.nextBytes(salt);
+
+            KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt, 65536, 128);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+            String hashedPassword = String.format("%x", new BigInteger(hash));
+            return hashedPassword;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * @param args the command line arguments

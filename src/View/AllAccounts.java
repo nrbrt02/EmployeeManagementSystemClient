@@ -208,10 +208,11 @@ void retriveAll() {
                 String permission = account.getPermisions();
                 boolean status = account.isStatus();
                 Employee emp = account.getTheEmployee();
+                String EmpName = emp.getNames();
                 String emial = emp.getEmail();
                 String phone = emp.getPhone();
                 tbModel.addRow(new Object[]{
-                    id, permission, status, phone, emial, phone,});
+                    id,EmpName, permission, status, phone, emial, phone,});
             }
         } catch (Exception e) {
             e.printStackTrace();
