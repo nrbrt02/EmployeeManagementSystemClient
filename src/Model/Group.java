@@ -5,11 +5,13 @@
  */
 package Model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author ZIPTECH LTD
  */
-public class Group {
+public class Group implements Serializable {
     private Integer groupId;
     private String name;
     private String description;

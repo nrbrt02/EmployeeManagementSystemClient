@@ -21,20 +21,24 @@ public class Project implements Serializable{
     private Date endDate;
     private String description;
     private String status;
-    private Set<Assignment> assignements;
+//    private List<Assignment> assignements;
 
+    
     public Project() {
     }
 
-    public Project(Integer projectId, String name, Date startDate, Date endDate, String description, String status, Set<Assignment> assignements) {
+    public Project(Integer projectId, String name, Date startDate, Date endDate, String description, String status) {
         this.projectId = projectId;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
         this.status = status;
-        this.assignements = assignements;
     }
+
+
+
+
 
     public Integer getProjectId() {
         return projectId;
@@ -84,13 +88,15 @@ public class Project implements Serializable{
         this.status = status;
     }
 
-    public Set<Assignment> getAssignements() {
-        return assignements;
-    }
+//    public List<Assignment> getAssignements() {
+//        return assignements;
+//    }
+//
+//    public void setAssignements(List<Assignment> assignements) {
+//        this.assignements = assignements;
+//    }
 
-    public void setAssignements(Set<Assignment> assignements) {
-        this.assignements = assignements;
-    }
+
     
     
 }

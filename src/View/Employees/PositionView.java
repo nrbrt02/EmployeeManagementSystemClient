@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
+package View.Employees;
 
 import Model.Position;
 import Services.PositionServices;

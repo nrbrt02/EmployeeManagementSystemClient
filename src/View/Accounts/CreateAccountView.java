@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
+package View.Accounts;
 
 import Model.Account;
 import Model.Employee;
@@ -59,6 +59,7 @@ public class CreateAccountView extends javax.swing.JDialog {
         status = new javax.swing.JCheckBox();
         permissionComb = new javax.swing.JComboBox<>();
         submitSearch = new javax.swing.JButton();
+        hasAccount = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -97,7 +98,7 @@ public class CreateAccountView extends javax.swing.JDialog {
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(67, 88, 146));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-save-16.png"))); // NOI18N
-        jButton1.setText("Add");
+        jButton1.setText("Save");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -153,6 +154,8 @@ public class CreateAccountView extends javax.swing.JDialog {
             }
         });
 
+        hasAccount.setBorder(null);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -178,7 +181,11 @@ public class CreateAccountView extends javax.swing.JDialog {
                                 .addComponent(status)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(hasAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(searchEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -194,7 +201,9 @@ public class CreateAccountView extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(4, 4, 4)
+                .addComponent(hasAccount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel5)
@@ -212,7 +221,7 @@ public class CreateAccountView extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(permissionComb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -245,8 +254,14 @@ public class CreateAccountView extends javax.swing.JDialog {
                 Employee employee = new Employee();
                 Integer empId = Integer.parseInt(searchEmp.getText());
                 employee.setEmployeeId(empId);
-
+                
                 Account account = new Account();
+                if(hasAccount.getText().equals("Has Account")){
+                    String selectedEmp = employeeInfo.getText();
+                    String[] parts = selectedEmp.split("-");
+                    account.setAccountId(Integer.parseInt(parts[0]));
+                }
+                
                 account.setTheEmployee(employee);
                 if (status.isSelected()) {
                     account.setStatus(true);
@@ -254,14 +269,14 @@ public class CreateAccountView extends javax.swing.JDialog {
                     account.setStatus(false);
                 }
                 account.setPermisions(permissionComb.getSelectedItem().toString());
-                account.setPassword(hasPassword("password123"));
-                
+                account.setPassword(hashPassword("password123"));
+
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 AccountServices service = (AccountServices) theReg.lookup("accounts");
                 Account accountObj = service.saveAccount(account);
 
                 if (accountObj != null) {
-                    JOptionPane.showMessageDialog(this, "Account Created");
+                    JOptionPane.showMessageDialog(this, "Data Saved");
                     searchEmp.setText("");
                     employeeInfo.setText("");
                     status.setSelected(false);
@@ -311,9 +326,17 @@ public class CreateAccountView extends javax.swing.JDialog {
                     account.setTheEmployee(emp);
                     Account accounts = service1.searchAccount(account);
                     if (accounts != null) {
-                        JOptionPane.showMessageDialog(this, "Employee Already has an Account");
+                        hasAccount.setText("Has Account");
+//                        JOptionPane.showMessageDialog(this, "Employee Already has an Account");
+                        employeeInfo.setText(accounts.getAccountId()+ "-" + employee.getNames());
+                        if (accounts.isStatus()) {
+                            status.setSelected(true);
+                        }
+                        permissionComb.setSelectedItem(accounts.getPermisions());
                     } else {
                         employeeInfo.setText(employee.getEmployeeId() + "-" + employee.getNames());
+                        permissionComb.setSelectedIndex(0);
+                        status.setSelected(false);
                     }
 
                 }
@@ -325,7 +348,7 @@ public class CreateAccountView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_submitSearchActionPerformed
 
-    public String hasPassword(String pass) throws NoSuchAlgorithmException {
+    public String hashPassword(String pass) throws NoSuchAlgorithmException {
         try {
             SecureRandom random = new SecureRandom();
             byte[] salt = new byte[16];
@@ -388,6 +411,7 @@ public class CreateAccountView extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JTextField employeeInfo;
+    private javax.swing.JTextField hasAccount;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

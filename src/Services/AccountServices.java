@@ -25,4 +25,6 @@ public interface AccountServices extends Remote {
     Account deleteAccount(Account accountObj) throws RemoteException;
 
     List<Account> allAccounts() throws RemoteException;
+
+    List<Account> loginAccount(Account accountObj) throws RemoteException;
 }

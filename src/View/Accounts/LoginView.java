@@ -3,7 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
+package View.Accounts;
+
+import Model.Account;
+import Model.Employee;
+import Services.AccountServices;
+import Services.EmployeeService;
+import View.HRDashboardView;
+import java.math.BigInteger;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.util.List;
+import java.util.regex.Pattern;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,10 +49,10 @@ public class LoginView extends javax.swing.JFrame {
         email = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        password = new javax.swing.JPasswordField();
         login = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        password = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,6 +72,11 @@ public class LoginView extends javax.swing.JFrame {
         login.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         login.setForeground(new java.awt.Color(67, 88, 146));
         login.setText("Login");
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("forgot password");
@@ -80,11 +102,10 @@ public class LoginView extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(email)
-                                .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))))
+                            .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(password))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -97,14 +118,16 @@ public class LoginView extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(email))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(password))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                        .addGap(1, 1, 1))
+                    .addComponent(jLabel3))
                 .addGap(63, 63, 63)
                 .addComponent(login)
                 .addGap(27, 27, 27)
                 .addComponent(jLabel4)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -121,7 +144,7 @@ public class LoginView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -137,6 +160,82 @@ public class LoginView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        if (!isValidEmail(email.getText())) {
+            JOptionPane.showMessageDialog(this, "Email not Valid");
+        } else if (password.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Password can't be Empty");
+        } else {
+            try {
+                Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+                EmployeeService service = (EmployeeService) theReg.lookup("employee");
+                List<Employee> isEmail = service.searchByEmail(email.getText());
+                if (isEmail.size() == 1) {
+                    Employee emp = isEmail.get(0);
+                    Integer theId = emp.getEmployeeId();
+
+                    AccountServices service1 = (AccountServices) theReg.lookup("accounts");
+
+                    String hashedPassword = hashPassword(password.getText());
+//                    System.out.println(hashedPassword);
+                    Account acc = new Account();
+                    acc.setPassword(hashedPassword);
+                    Employee emp1 = new Employee();
+                    emp1.setEmployeeId(theId);
+                    acc.setTheEmployee(emp1);
+
+                    List<Account> attempLogin = service1.loginAccount(acc);
+                    if (attempLogin != null) {
+                        for (Account account : attempLogin) {
+                            if (account.getPermisions().equals("HR")) {
+                                HRDashboardView view = new HRDashboardView();
+                                view.show();
+                                dispose();
+                            } else if (account.getPermisions().equals("employee")) {
+                                HRDashboardView view = new HRDashboardView();
+                                view.show();
+                                dispose();
+                            }
+                        }
+                        HRDashboardView view = new HRDashboardView();
+                        view.show();
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Incorrect password");
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Provided Email doesn't have an account");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_loginActionPerformed
+    public static boolean isValidEmail(String email) {
+        String regex = "^[\\w!#$%&'*+/=?^`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?$";
+        return Pattern.matches(regex, email);
+    }
+
+    public String hashPassword(String pass) throws NoSuchAlgorithmException {
+        try {
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[16];
+            random.nextBytes(salt);
+
+            KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt, 65536, 128);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+            byte[] hash = factory.generateSecret(spec).getEncoded();
+            String hashedPassword = String.format("%x", new BigInteger(hash));
+            return hashedPassword;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * @param args the command line arguments

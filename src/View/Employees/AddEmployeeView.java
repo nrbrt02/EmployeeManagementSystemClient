@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
+package View.Employees;
 
 import Model.Department;
 import Model.Employee;
@@ -61,6 +61,10 @@ public class AddEmployeeView extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         departmentComb = new javax.swing.JComboBox<>();
         positionComb = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        searchEmp = new javax.swing.JTextField();
+        submitSearch = new javax.swing.JButton();
+        cancel1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -99,7 +103,7 @@ public class AddEmployeeView extends javax.swing.JDialog {
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(67, 88, 146));
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-save-16.png"))); // NOI18N
-        jButton1.setText("Add");
+        jButton1.setText("Save");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -108,9 +112,9 @@ public class AddEmployeeView extends javax.swing.JDialog {
 
         cancel.setBackground(new java.awt.Color(255, 255, 255));
         cancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        cancel.setForeground(new java.awt.Color(204, 0, 0));
-        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-close-16.png"))); // NOI18N
-        cancel.setText("Close");
+        cancel.setForeground(new java.awt.Color(67, 88, 146));
+        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-waste-16 (2).png"))); // NOI18N
+        cancel.setText("Delete");
         cancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelActionPerformed(evt);
@@ -165,6 +169,36 @@ public class AddEmployeeView extends javax.swing.JDialog {
 
         positionComb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select --" }));
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel11.setText("Search employee:");
+
+        searchEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchEmpActionPerformed(evt);
+            }
+        });
+
+        submitSearch.setBackground(new java.awt.Color(255, 255, 255));
+        submitSearch.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        submitSearch.setForeground(new java.awt.Color(67, 88, 146));
+        submitSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-search-24.png"))); // NOI18N
+        submitSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitSearchActionPerformed(evt);
+            }
+        });
+
+        cancel1.setBackground(new java.awt.Color(255, 255, 255));
+        cancel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cancel1.setForeground(new java.awt.Color(204, 0, 0));
+        cancel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-close-16.png"))); // NOI18N
+        cancel1.setText("Close");
+        cancel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -201,22 +235,36 @@ public class AddEmployeeView extends javax.swing.JDialog {
                         .addComponent(departmentComb, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addGap(33, 33, 33)
+                        .addGap(20, 20, 20)
                         .addComponent(cancel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(20, 20, 20)
+                        .addComponent(cancel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchEmp)
+                        .addGap(3, 3, 3)
+                        .addComponent(submitSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11)
+                        .addComponent(searchEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(submitSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(4, 4, 4)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(names, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(5, 5, 5)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
@@ -233,7 +281,7 @@ public class AddEmployeeView extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(departmentComb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -242,7 +290,8 @@ public class AddEmployeeView extends javax.swing.JDialog {
                 .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(84, 84, 84))
         );
 
@@ -254,21 +303,19 @@ public class AddEmployeeView extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        void filldepartment() {
+    void filldepartment() {
         try {
             Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
             DepartmentServices service = (DepartmentServices) theReg.lookup("department");
             List<Department> allDepartments = service.allDepartments();
             for (Department department : allDepartments) {
-                departmentComb.addItem(department.getDepartmentId()+"-"+department.getName());
+                departmentComb.addItem(department.getDepartmentId() + "-" + department.getName());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -281,7 +328,7 @@ public class AddEmployeeView extends javax.swing.JDialog {
             PositionServices service = (PositionServices) theReg.lookup("position");
             List<Position> allPositions = service.allPositions();
             for (Position position : allPositions) {
-                positionComb.addItem(position.getPositionId()+"-"+position.getTitle());
+                positionComb.addItem(position.getPositionId() + "-" + position.getTitle());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -304,10 +351,14 @@ public class AddEmployeeView extends javax.swing.JDialog {
         } else {
             try {
                 Employee employee = new Employee();
+                if (!searchEmp.getText().trim().isEmpty() && searchEmp.getText().matches("^[0-9]*$")) {
+                    Integer theId = Integer.parseInt(searchEmp.getText());
+                    employee.setEmployeeId(theId);
+                }
                 employee.setNames(names.getText());
                 employee.setEmail(email.getText());
 
-                String thePhoneNumber = countryCode.getSelectedItem().toString()+phoneNumber.getText();
+                String thePhoneNumber = countryCode.getSelectedItem().toString() + phoneNumber.getText();
                 employee.setPhone(thePhoneNumber);
                 employee.setAddress(address.getText());
 
@@ -329,7 +380,7 @@ public class AddEmployeeView extends javax.swing.JDialog {
                 EmployeeService service = (EmployeeService) theReg.lookup("employee");
                 Employee employeeObj = service.saveEmployee(employee);
                 if (employeeObj != null) {
-                    JOptionPane.showMessageDialog(this, "Employee Added");
+                    JOptionPane.showMessageDialog(this, "Data saved");
                     names.setText("");
                     email.setText("");
                     phoneNumber.setText("");
@@ -348,7 +399,39 @@ public class AddEmployeeView extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        dispose();
+
+        if (searchEmp.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Search can't be Empity");
+        } else if (!searchEmp.getText().matches("^[0-9]*$")) {
+            JOptionPane.showMessageDialog(this, "Only search by Id");
+        } else {
+            int choice = JOptionPane.showConfirmDialog(this, "Are you sure to delete");
+            if (choice == JOptionPane.YES_OPTION) {
+                try {
+                    Employee employee = new Employee();
+                    Integer theId = Integer.parseInt(searchEmp.getText());
+                    employee.setEmployeeId(theId);
+
+                    Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+                    EmployeeService service = (EmployeeService) theReg.lookup("employee");
+                    Employee employeeObj = service.deleteEmployee(employee);
+                    if (employeeObj != null) {
+                        JOptionPane.showMessageDialog(this, "Data Deleted");
+                        names.setText("");
+                        email.setText("");
+                        phoneNumber.setText("");
+                        address.setText("");
+                        departmentComb.setSelectedIndex(0);
+                        positionComb.setSelectedIndex(0);
+                        searchEmp.setText("");
+                        //                    retriveAll();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Something wrong");
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }
     }//GEN-LAST:event_cancelActionPerformed
 
     private void namesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namesActionPerformed
@@ -367,10 +450,56 @@ public class AddEmployeeView extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_addressActionPerformed
 
-        public static boolean isValidEmail(String email) {
+    private void searchEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchEmpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchEmpActionPerformed
+
+    private void submitSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitSearchActionPerformed
+        if (searchEmp.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Search can't be Empity");
+        } else if (!searchEmp.getText().matches("^[0-9]*$")) {
+            JOptionPane.showMessageDialog(this, "Only search by Id");
+        } else {
+            try {
+                Employee emp = new Employee();
+                Integer theId = Integer.parseInt(searchEmp.getText());
+                emp.setEmployeeId(theId);
+
+                Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+                EmployeeService service = (EmployeeService) theReg.lookup("employee");
+                Employee employee = service.searchEmployee(emp);
+
+                if (employee == null) {
+                    JOptionPane.showMessageDialog(this, "No Results");
+                } else {
+                    names.setText(employee.getNames());
+                    email.setText(employee.getEmail());
+
+                    String phoneNum = employee.getPhone();
+                    char[] toChar = phoneNum.toCharArray();
+//                   countryCode.setSelectedItem(part1);
+                    phoneNumber.setText(employee.getPhone());
+                    address.setText(employee.getAddress());
+                    departmentComb.setSelectedItem(employee.getTheDepartment().getDepartmentId() + "-" + employee.getTheDepartment().getName());
+                    positionComb.setSelectedItem(employee.getThePosition().getPositionId() + "-" + employee.getThePosition().getTitle());
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }//GEN-LAST:event_submitSearchActionPerformed
+
+    private void cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_cancel1ActionPerformed
+
+    public static boolean isValidEmail(String email) {
         String regex = "^[\\w!#$%&'*+/=?^`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?$";
         return Pattern.matches(regex, email);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -417,11 +546,13 @@ public class AddEmployeeView extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField address;
     private javax.swing.JButton cancel;
+    private javax.swing.JButton cancel1;
     private javax.swing.JComboBox<String> countryCode;
     private javax.swing.JComboBox<String> departmentComb;
     private javax.swing.JTextField email;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -434,5 +565,7 @@ public class AddEmployeeView extends javax.swing.JDialog {
     private javax.swing.JTextField names;
     private javax.swing.JTextField phoneNumber;
     private javax.swing.JComboBox<String> positionComb;
+    private javax.swing.JTextField searchEmp;
+    private javax.swing.JButton submitSearch;
     // End of variables declaration//GEN-END:variables
 }
