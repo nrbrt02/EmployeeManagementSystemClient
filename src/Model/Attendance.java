@@ -6,26 +6,27 @@
 package Model;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.util.Date;
 
 /**
  *
  * @author ZIPTECH LTD
  */
-public class Attendance implements Serializable{
+public class Attendance implements Serializable {
+
     private Integer attendanceId;
     private Date date;
-    private Timestamp inTime;
-    private Timestamp outTime;
-    private Duration totalTime;
+    private Date inTime;
+    private Date outTime;
+    private long totalTime;
     private Employee theEmployee;
 
     public Attendance() {
     }
 
-    public Attendance(Integer id, Date date, Timestamp inTime, Timestamp outTime, Duration totalTime, Employee theEmployee) {
+    public Attendance(Integer id, Date date, Date inTime, Date outTime, long totalTime, Employee theEmployee) {
         this.attendanceId = id;
         this.date = date;
         this.inTime = inTime;
@@ -50,27 +51,27 @@ public class Attendance implements Serializable{
         this.date = date;
     }
 
-    public Timestamp getInTime() {
+    public Date getInTime() {
         return inTime;
     }
 
-    public void setInTime(Timestamp inTime) {
+    public void setInTime(Date inTime) {
         this.inTime = inTime;
     }
 
-    public Timestamp getOutTime() {
+    public Date getOutTime() {
         return outTime;
     }
 
-    public void setOutTime(Timestamp outTime) {
+    public void setOutTime(Date outTime) {
         this.outTime = outTime;
     }
 
-    public Duration getTotalTime() {
+    public long getTotalTime() {
         return totalTime;
     }
 
-    public void setTotalTime(Duration totalTime) {
+    public void setTotalTime(long totalTime) {
         this.totalTime = totalTime;
     }
 
@@ -81,6 +82,4 @@ public class Attendance implements Serializable{
     public void setTheEmployee(Employee theEmployee) {
         this.theEmployee = theEmployee;
     }
-    
-    
 }

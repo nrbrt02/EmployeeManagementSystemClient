@@ -5,10 +5,19 @@
  */
 package View;
 
-import View.Tabs.ProjectsView;
-import View.Tabs.AttendanceView;
-import View.Tabs.EmployeeView;
+import Model.Attendance;
+import Model.Employee;
+import Services.AttendanceService;
+import View.Accounts.LoginView;
+import View.Leave.AskLeave;
 import View.Tabs.AccountsView;
+import View.Tabs.AttendanceView;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +30,7 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
      */
     public EmployeeDashboardView() {
         initComponents();
+        checkLogin();
     }
 
     /**
@@ -37,7 +47,6 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -48,13 +57,21 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        employeeName = new javax.swing.JLabel();
+        permissions = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         DesktopPane = new javax.swing.JDesktopPane();
@@ -90,11 +107,6 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
 
         sidepan.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 260, 50));
-
-        jLabel3.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Employee");
-        sidepan.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
         sidepan.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(43, 62, 217, 20));
 
         jPanel5.setBackground(new java.awt.Color(242, 238, 231));
@@ -209,43 +221,20 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
 
         sidepan.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 290, 40));
 
-        jPanel9.setBackground(new java.awt.Color(242, 238, 231));
-        jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel9MouseClicked(evt);
-            }
-        });
+        jLabel21.setBackground(new java.awt.Color(51, 51, 51));
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel21.setText("EMPLOYEE-MGT");
+        sidepan.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-pen-24.png"))); // NOI18N
+        employeeName.setBackground(new java.awt.Color(51, 51, 51));
+        employeeName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        employeeName.setToolTipText("");
+        sidepan.add(employeeName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
-        jLabel18.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel18.setText("Assignements");
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-
-        sidepan.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 290, 40));
+        permissions.setBackground(new java.awt.Color(51, 51, 51));
+        permissions.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        permissions.setToolTipText("");
+        sidepan.add(permissions, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 0, 10));
 
         jPanel10.setBackground(new java.awt.Color(242, 238, 251));
         jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -283,12 +272,61 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        sidepan.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 110, -1));
+        sidepan.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 120, -1));
 
-        jLabel21.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel21.setText("EMPLOYEE-MGT");
-        sidepan.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jPanel11.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel11MouseClicked(evt);
+            }
+        });
+        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-exit-24.png"))); // NOI18N
+        jPanel11.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        jLabel23.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel23.setText("Check-Out");
+        jPanel11.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
+
+        sidepan.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 120, -1));
+
+        jPanel12.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel12MouseClicked(evt);
+            }
+        });
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-check-24.png"))); // NOI18N
+        jPanel12.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        jLabel25.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel25.setText("Check-In");
+        jPanel12.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
+
+        sidepan.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 120, -1));
+
+        jPanel13.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel13MouseClicked(evt);
+            }
+        });
+        jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-question-24_1.png"))); // NOI18N
+        jPanel13.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        jLabel27.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel27.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel27.setText("Ask Leave");
+        jPanel13.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
+
+        sidepan.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 120, -1));
 
         bg.add(sidepan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 750));
 
@@ -353,7 +391,12 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    void checkLogin() {
+        if (employeeName.getText().equals(null)) {
+            JOptionPane.showMessageDialog(this, "Login Fisrt");
+            System.exit(0);
+        }
+    }
     private void jPanel2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseEntered
 
     }//GEN-LAST:event_jPanel2MouseEntered
@@ -382,13 +425,119 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel8MouseClicked
 
-    private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPanel9MouseClicked
-
     private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseClicked
-        // TODO add your handling code here:
+        employeeName.setText(null);
+        LoginView view = new LoginView();
+        view.show();
+        dispose();
     }//GEN-LAST:event_jPanel10MouseClicked
+
+    private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseClicked
+        String thest = employeeName.getText();
+        String[] parts = thest.split("-");
+        Integer theId = Integer.parseInt(parts[2]);
+
+        Date today = new Date();
+        try {
+            Attendance attd = new Attendance();
+
+            Employee emp = new Employee();
+            emp.setEmployeeId(theId);
+            attd.setTheEmployee(emp);
+            attd.setDate(today);
+
+            Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+            AttendanceService service = (AttendanceService) theReg.lookup("attendance");
+            List<Attendance> attObj = service.searchAttByEmployeeAndDate(attd);
+
+            if (attObj.size() == 1) {
+                for (Attendance att : attObj) {
+                    if (att.getOutTime() == null) {
+                        long inTimeInMillis = att.getInTime().getTime();
+                        long todayInMillis = today.getTime();
+                        long diffInMilliseconds = todayInMillis - inTimeInMillis;
+//                    long diffInHours = diffInMilliseconds / (1000);
+                        long diffInHours = TimeUnit.MILLISECONDS.toHours(diffInMilliseconds);
+                        attd.setAttendanceId(att.getAttendanceId());
+                        attd.setDate(att.getDate());
+                        attd.setTheEmployee(att.getTheEmployee());
+                        attd.setInTime(att.getInTime());
+                        attd.setOutTime(today);
+                        attd.setTotalTime(diffInHours);
+
+                        Attendance attObj1 = service.editAttendance(attd);
+                        if (attObj1 != null) {
+                            JOptionPane.showMessageDialog(this, "Check out complite");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Something wrong");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Already checked Out");
+                    }
+
+                }
+            } else if (attObj.size() == 0) {
+                JOptionPane.showMessageDialog(this, "It looks Like you did not check In");
+            } else {
+                JOptionPane.showMessageDialog(this, "Something Wrong");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jPanel11MouseClicked
+
+    private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
+
+        String thest = employeeName.getText();
+        String[] parts = thest.split("-");
+        Integer theId = Integer.parseInt(parts[2]);
+
+        Date today = new Date();
+        try {
+            Attendance attd = new Attendance();
+
+            Employee emp = new Employee();
+            emp.setEmployeeId(theId);
+            attd.setTheEmployee(emp);
+            attd.setDate(today);
+
+            Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+            AttendanceService service = (AttendanceService) theReg.lookup("attendance");
+            List<Attendance> attObj = service.searchAttByEmployeeAndDate(attd);
+
+            if (attObj.size() == 1) {
+                JOptionPane.showMessageDialog(this, "Already checked In");
+            } else {
+                emp.setEmployeeId(theId);
+                attd.setTheEmployee(emp);
+                attd.setDate(today);
+                attd.setInTime(today);
+
+                Attendance attObj1 = service.saveAttendance(attd);
+
+                if (attObj1 != null) {
+                    JOptionPane.showMessageDialog(this, "Check-In done \nRemember to check out");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Something Wrong");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jPanel12MouseClicked
+
+    private void jPanel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel13MouseClicked
+        String thest = employeeName.getText();
+        String[] parts = thest.split("-");
+
+        AskLeave view = new AskLeave();
+        view.empId.setText(parts[2]);
+        view.empName.setText(parts[0]);
+        view.show();
+    }//GEN-LAST:event_jPanel13MouseClicked
 
     /**
      * @param args the command line arguments
@@ -431,32 +580,39 @@ public class EmployeeDashboardView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane DesktopPane;
     private javax.swing.JPanel bg;
+    public javax.swing.JLabel employeeName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JSeparator jSeparator1;
+    public javax.swing.JLabel permissions;
     private javax.swing.JPanel sidepan;
     // End of variables declaration//GEN-END:variables
 }

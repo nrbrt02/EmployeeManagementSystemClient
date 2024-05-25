@@ -7,7 +7,7 @@ package View.Tabs;
 
 import View.Accounts.CreateAccountView;
 import View.Accounts.AllAccounts;
-import View.changePasswordsView;
+import View.Accounts.ChangePasswordsView;
 
 /**
  *
@@ -182,7 +182,7 @@ public class AccountsView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jPanel2MouseClicked
 
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
-        new changePasswordsView(null, true).show();
+        new ChangePasswordsView(null, true).show();
     }//GEN-LAST:event_jPanel3MouseClicked
 
 

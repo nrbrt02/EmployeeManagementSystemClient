@@ -254,14 +254,14 @@ public class CreateAccountView extends javax.swing.JDialog {
                 Employee employee = new Employee();
                 Integer empId = Integer.parseInt(searchEmp.getText());
                 employee.setEmployeeId(empId);
-                
+
                 Account account = new Account();
-                if(hasAccount.getText().equals("Has Account")){
+                if (hasAccount.getText().equals("Has Account")) {
                     String selectedEmp = employeeInfo.getText();
                     String[] parts = selectedEmp.split("-");
                     account.setAccountId(Integer.parseInt(parts[0]));
                 }
-                
+
                 account.setTheEmployee(employee);
                 if (status.isSelected()) {
                     account.setStatus(true);
@@ -269,7 +269,8 @@ public class CreateAccountView extends javax.swing.JDialog {
                     account.setStatus(false);
                 }
                 account.setPermisions(permissionComb.getSelectedItem().toString());
-                account.setPassword(hashPassword("password123"));
+//                account.setPassword(hashPassword("password123"));
+                account.setPassword("password123");
 
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 AccountServices service = (AccountServices) theReg.lookup("accounts");
@@ -328,7 +329,7 @@ public class CreateAccountView extends javax.swing.JDialog {
                     if (accounts != null) {
                         hasAccount.setText("Has Account");
 //                        JOptionPane.showMessageDialog(this, "Employee Already has an Account");
-                        employeeInfo.setText(accounts.getAccountId()+ "-" + employee.getNames());
+                        employeeInfo.setText(accounts.getAccountId() + "-" + employee.getNames());
                         if (accounts.isStatus()) {
                             status.setSelected(true);
                         }

@@ -9,6 +9,7 @@ import Model.Account;
 import Model.Employee;
 import Services.AccountServices;
 import Services.EmployeeService;
+import View.EmployeeDashboardView;
 import View.HRDashboardView;
 import java.math.BigInteger;
 import java.rmi.registry.LocateRegistry;
@@ -80,6 +81,11 @@ public class LoginView extends javax.swing.JFrame {
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("forgot password");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -170,50 +176,60 @@ public class LoginView extends javax.swing.JFrame {
             try {
                 Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
                 EmployeeService service = (EmployeeService) theReg.lookup("employee");
-                List<Employee> isEmail = service.searchByEmail(email.getText());
-                if (isEmail.size() == 1) {
-                    Employee emp = isEmail.get(0);
-                    Integer theId = emp.getEmployeeId();
+                List<Employee> theEmp = service.searchByEmail(email.getText());
+                for (Employee isEmail : theEmp) {
 
-                    AccountServices service1 = (AccountServices) theReg.lookup("accounts");
+                    if (isEmail != null) {
+//                    Employee emp = isEmail.get(0);
+                        Integer theId = isEmail.getEmployeeId();
+                        String names = isEmail.getNames();
+                        AccountServices service1 = (AccountServices) theReg.lookup("accounts");
 
-                    String hashedPassword = hashPassword(password.getText());
+//                    String hashedPassword = hashPassword(password.getText());
 //                    System.out.println(hashedPassword);
-                    Account acc = new Account();
-                    acc.setPassword(hashedPassword);
-                    Employee emp1 = new Employee();
-                    emp1.setEmployeeId(theId);
-                    acc.setTheEmployee(emp1);
+                        Account acc = new Account();
+                        acc.setPassword(password.getText());
+                        Employee emp1 = new Employee();
+                        emp1.setEmployeeId(theId);
+                        acc.setTheEmployee(emp1);
 
-                    List<Account> attempLogin = service1.loginAccount(acc);
-                    if (attempLogin != null) {
-                        for (Account account : attempLogin) {
-                            if (account.getPermisions().equals("HR")) {
+                        List<Account> attempLogin = service1.loginAccount(acc);
+                        if (attempLogin.size() != 0) {
+                            Account loggedInAccount = attempLogin.get(0);
+                            if (!loggedInAccount.isStatus()) {
+                                JOptionPane.showMessageDialog(this, "Account has no permissions");
+                            } else if (loggedInAccount.getPermisions().equals("HR")) {
                                 HRDashboardView view = new HRDashboardView();
+                                String permisions = loggedInAccount.getPermisions();
+                                view.permissionsJText.setText(names + "-" + permisions + "-" + theId);
                                 view.show();
                                 dispose();
-                            } else if (account.getPermisions().equals("employee")) {
-                                HRDashboardView view = new HRDashboardView();
+                            } else if (loggedInAccount.getPermisions().equals("employee")) {
+                                EmployeeDashboardView view = new EmployeeDashboardView();
+                                String permisions = loggedInAccount.getPermisions();
+                                view.employeeName.setText(names + "-" + permisions + "-" + theId);
                                 view.show();
                                 dispose();
                             }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Incorrect password");
                         }
-                        HRDashboardView view = new HRDashboardView();
-                        view.show();
-                        dispose();
+
                     } else {
-                        JOptionPane.showMessageDialog(this, "Incorrect password");
+                        JOptionPane.showMessageDialog(this, "Provided Email doesn't have an account");
                     }
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Provided Email doesn't have an account");
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }//GEN-LAST:event_loginActionPerformed
+
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        ChangePasswordsView view = new ChangePasswordsView();
+        view.show();
+        dispose();
+    }//GEN-LAST:event_jLabel4MouseClicked
     public static boolean isValidEmail(String email) {
         String regex = "^[\\w!#$%&'*+/=?^`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?$";
         return Pattern.matches(regex, email);

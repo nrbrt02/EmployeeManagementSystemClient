@@ -3,15 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View.Employees;
+package View.Tabs;
 
-import Model.Department;
 import Model.Employee;
-import Model.Position;
-import Services.EmployeeService;
+import Model.Leave;
+import Services.LeaveServices;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -20,13 +25,12 @@ import javax.swing.table.TableRowSorter;
  *
  * @author ZIPTECH LTD
  */
-public class AllEmployeeView extends javax.swing.JDialog {
+public class LeaveView extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form AllEmployeeView1
+     * Creates new form LeaveView
      */
-    public AllEmployeeView(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public LeaveView() {
         initComponents();
         retriveAll();
     }
@@ -50,8 +54,8 @@ public class AllEmployeeView extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         cancel = new javax.swing.JButton();
         cancel1 = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        cancel2 = new javax.swing.JButton();
+        cancel3 = new javax.swing.JButton();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -61,7 +65,7 @@ public class AllEmployeeView extends javax.swing.JDialog {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("All Employee");
+        jLabel8.setText("All Leave Requestes");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -72,7 +76,7 @@ public class AllEmployeeView extends javax.swing.JDialog {
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8)
-                .addContainerGap(405, Short.MAX_VALUE))
+                .addContainerGap(350, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,14 +94,14 @@ public class AllEmployeeView extends javax.swing.JDialog {
 
             },
             new String [] {
-                "#", "Names", "E-mail", "Phone", "Address", "Department", "Position"
+                "#", "EmpId", "Names", "Phone", "E-mail", "Department", "Type", "Start", "End", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, true
+                false, true, true, true, true, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -146,13 +150,31 @@ public class AllEmployeeView extends javax.swing.JDialog {
             }
         });
 
+        cancel2.setBackground(new java.awt.Color(255, 255, 255));
+        cancel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cancel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-check-24.png"))); // NOI18N
+        cancel2.setText("Approve");
+        cancel2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel2ActionPerformed(evt);
+            }
+        });
+
+        cancel3.setBackground(new java.awt.Color(255, 255, 255));
+        cancel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cancel3.setForeground(new java.awt.Color(204, 0, 0));
+        cancel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-close-16.png"))); // NOI18N
+        cancel3.setText("Decline");
+        cancel3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -163,16 +185,21 @@ public class AllEmployeeView extends javax.swing.JDialog {
                         .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(cancel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cancel1)
                         .addGap(18, 18, 18)
                         .addComponent(cancel)
                         .addContainerGap())))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -181,7 +208,9 @@ public class AllEmployeeView extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -189,15 +218,11 @@ public class AllEmployeeView extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -207,22 +232,23 @@ public class AllEmployeeView extends javax.swing.JDialog {
         DefaultTableModel tbModel = (DefaultTableModel) allEmployee.getModel();
         try {
             Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
-            EmployeeService service = (EmployeeService) theReg.lookup("employee");
-            List<Employee> allEmployees = service.allEmployees();
+            LeaveServices service = (LeaveServices) theReg.lookup("leave");
+            List<Leave> allEmployees = service.allLeaves();
             tbModel.setRowCount(0);
-            for (Employee employee : allEmployees) {
-                Integer id = employee.getEmployeeId();
-                String name = employee.getNames();
-                String address = employee.getAddress();
-                String email = employee.getEmail();
-                String phone = employee.getPhone();
-                Department theDept = employee.getTheDepartment();
-                String dept = theDept.getName();
-                Position thePos = employee.getThePosition();
-                String pos = thePos.getTitle();
+            for (Leave leave : allEmployees) {
+                Integer id = leave.getLeaveId();
+                Integer empId = leave.getTheEmployee().getEmployeeId();
+                String name = leave.getTheEmployee().getNames();
+                String phone = leave.getTheEmployee().getPhone();
+                String email = leave.getTheEmployee().getEmail();
+                String theDept = leave.getTheEmployee().getTheDepartment().getName();
+                String type = leave.getType();
+                Date start = leave.getStartDate();
+                Date end = leave.getEndDate();
+                String status = leave.getStatus();
 
                 tbModel.addRow(new Object[]{
-                    id, name, email, phone, address, dept, pos,});
+                    id, empId, name, phone, email, theDept, type, start, end, status});
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,53 +278,92 @@ public class AllEmployeeView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_cancel1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AllEmployeeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AllEmployeeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AllEmployeeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AllEmployeeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void cancel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel2ActionPerformed
+        if (allEmployee.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Select A row first");
+        } else {
+            int selectedRow = allEmployee.getSelectedRow();
+            DefaultTableModel tbModel = (DefaultTableModel) allEmployee.getModel();
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AllEmployeeView dialog = new AllEmployeeView(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+            try {
+                Leave leave = new Leave();
+                leave.setLeaveId(Integer.parseInt(tbModel.getValueAt(selectedRow, 0).toString()));
+                Employee emp = new Employee();
+                emp.setEmployeeId(Integer.parseInt(tbModel.getValueAt(selectedRow, 1).toString()));
+                leave.setTheEmployee(emp);
+                leave.setType(tbModel.getValueAt(selectedRow, 6).toString());
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date theStart = dateFormat.parse(tbModel.getValueAt(selectedRow, 7).toString());
+                leave.setStartDate(theStart);
+                Date theEnd = dateFormat.parse(tbModel.getValueAt(selectedRow, 8).toString());
+                leave.setEndDate(theEnd);
+                leave.setStatus("approved");
+
+                Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+                LeaveServices service = (LeaveServices) theReg.lookup("leave");
+                Leave leaveObj = service.updateLeave(leave);
+
+                if (leaveObj != null) {
+                    JOptionPane.showMessageDialog(this, "Success");
+                    retriveAll();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Fail");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-    }
+
+        }
+    }//GEN-LAST:event_cancel2ActionPerformed
+
+    private void cancel3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel3ActionPerformed
+        if (allEmployee.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Select A row first");
+        } else {
+            int selectedRow = allEmployee.getSelectedRow();
+            DefaultTableModel tbModel = (DefaultTableModel) allEmployee.getModel();
+
+            try {
+                Leave leave = new Leave();
+                leave.setLeaveId(Integer.parseInt(tbModel.getValueAt(selectedRow, 0).toString()));
+                Employee emp = new Employee();
+                emp.setEmployeeId(Integer.parseInt(tbModel.getValueAt(selectedRow, 1).toString()));
+                leave.setTheEmployee(emp);
+                leave.setType(tbModel.getValueAt(selectedRow, 6).toString());
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date theStart = dateFormat.parse(tbModel.getValueAt(selectedRow, 7).toString());
+                leave.setStartDate(theStart);
+                Date theEnd = dateFormat.parse(tbModel.getValueAt(selectedRow, 8).toString());
+                leave.setEndDate(theEnd);
+                leave.setStatus("declined");
+
+                Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+                LeaveServices service = (LeaveServices) theReg.lookup("leave");
+                Leave leaveObj = service.updateLeave(leave);
+
+                if (leaveObj != null) {
+                    JOptionPane.showMessageDialog(this, "Success");
+                    retriveAll();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Fail");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_cancel3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable allEmployee;
     private javax.swing.JButton cancel;
     private javax.swing.JButton cancel1;
+    private javax.swing.JButton cancel2;
+    private javax.swing.JButton cancel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

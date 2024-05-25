@@ -5,10 +5,21 @@
  */
 package View;
 
+import Model.Attendance;
+import Model.Employee;
+import Services.AttendanceService;
+import View.Accounts.LoginView;
 import View.Tabs.ProjectsView;
 import View.Tabs.AttendanceView;
 import View.Tabs.EmployeeView;
 import View.Tabs.AccountsView;
+import View.Tabs.LeaveView;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +32,7 @@ public class HRDashboardView extends javax.swing.JFrame {
      */
     public HRDashboardView() {
         initComponents();
+        checkLogin();
     }
 
     /**
@@ -54,13 +66,16 @@ public class HRDashboardView extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
+        permissionsJText = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         DesktopPane = new javax.swing.JDesktopPane();
@@ -271,44 +286,6 @@ public class HRDashboardView extends javax.swing.JFrame {
 
         sidepan.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 420, 290, 40));
 
-        jPanel9.setBackground(new java.awt.Color(242, 238, 231));
-        jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel9MouseClicked(evt);
-            }
-        });
-
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-pen-24.png"))); // NOI18N
-
-        jLabel18.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel18.setText("Assignements");
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-
-        sidepan.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 470, 290, 40));
-
         jPanel10.setBackground(new java.awt.Color(242, 238, 251));
         jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -347,15 +324,50 @@ public class HRDashboardView extends javax.swing.JFrame {
 
         sidepan.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 700, 110, -1));
 
-        jLabel21.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel21.setText("HR");
-        sidepan.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+        permissionsJText.setBackground(new java.awt.Color(51, 51, 51));
+        permissionsJText.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        permissionsJText.setToolTipText("");
+        sidepan.add(permissionsJText, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+
+        jPanel12.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel12MouseClicked(evt);
+            }
+        });
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-check-24.png"))); // NOI18N
+        jPanel12.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        jLabel25.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel25.setText("Check-In");
+        jPanel12.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
+
+        sidepan.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 120, -1));
+
+        jPanel11.setBackground(new java.awt.Color(242, 238, 231));
+        jPanel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel11MouseClicked(evt);
+            }
+        });
+        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-exit-24.png"))); // NOI18N
+        jPanel11.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 30));
+
+        jLabel23.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel23.setText("Check-Out");
+        jPanel11.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
+
+        sidepan.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 650, 120, -1));
 
         bg.add(sidepan, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 750));
 
         jPanel1.setBackground(new java.awt.Color(57, 63, 80));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setForeground(new java.awt.Color(242, 238, 231));
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icons8-close-30.png"))); // NOI18N
@@ -364,9 +376,21 @@ public class HRDashboardView extends javax.swing.JFrame {
                 jLabel6MouseClicked(evt);
             }
         });
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 0, 27, 27));
 
-        bg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 0, 1020, 100));
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        bg.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 0, 30, 30));
 
         DesktopPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -378,10 +402,10 @@ public class HRDashboardView extends javax.swing.JFrame {
         );
         DesktopPaneLayout.setVerticalGroup(
             DesktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 650, Short.MAX_VALUE)
+            .addGap(0, 720, Short.MAX_VALUE)
         );
 
-        bg.add(DesktopPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, 1020, 650));
+        bg.add(DesktopPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 1020, 720));
 
         jPanel4.setBackground(new java.awt.Color(242, 238, 231));
         jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -453,16 +477,119 @@ public class HRDashboardView extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel7MouseClicked
 
     private void jPanel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseClicked
-        // TODO add your handling code here:
+        DesktopPane.removeAll();
+        LeaveView view = new LeaveView();
+        DesktopPane.add(view).setVisible(true);
     }//GEN-LAST:event_jPanel8MouseClicked
 
-    private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPanel9MouseClicked
-
     private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseClicked
-        // TODO add your handling code here:
+        permissionsJText.setText(null);
+        LoginView view = new LoginView();
+        view.show();
+        dispose();
     }//GEN-LAST:event_jPanel10MouseClicked
+
+    private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
+
+        String thest = permissionsJText.getText();
+        String[] parts = thest.split("-");
+        Integer theId = Integer.parseInt(parts[2]);
+
+        Date today = new Date();
+        try {
+            Attendance attd = new Attendance();
+
+            Employee emp = new Employee();
+            emp.setEmployeeId(theId);
+            attd.setTheEmployee(emp);
+            attd.setDate(today);
+
+            Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+            AttendanceService service = (AttendanceService) theReg.lookup("attendance");
+            List<Attendance> attObj = service.searchAttByEmployeeAndDate(attd);
+
+            if (attObj.size() == 1) {
+                JOptionPane.showMessageDialog(this, "Already checked In");
+            } else {
+                emp.setEmployeeId(theId);
+                attd.setTheEmployee(emp);
+                attd.setDate(today);
+                attd.setInTime(today);
+
+                Attendance attObj1 = service.saveAttendance(attd);
+
+                if (attObj1 != null) {
+                    JOptionPane.showMessageDialog(this, "Check-In done \nRemember to check out");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Something Wrong");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jPanel12MouseClicked
+
+    private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseClicked
+        String thest = permissionsJText.getText();
+        String[] parts = thest.split("-");
+        Integer theId = Integer.parseInt(parts[2]);
+
+        Date today = new Date();
+        try {
+            Attendance attd = new Attendance();
+
+            Employee emp = new Employee();
+            emp.setEmployeeId(theId);
+            attd.setTheEmployee(emp);
+            attd.setDate(today);
+
+            Registry theReg = LocateRegistry.getRegistry("127.0.0.1", 8001);
+            AttendanceService service = (AttendanceService) theReg.lookup("attendance");
+            List<Attendance> attObj = service.searchAttByEmployeeAndDate(attd);
+
+            if (attObj.size() == 1) {
+                for (Attendance att : attObj) {
+                    if (att.getOutTime() == null) {
+                        long inTimeInMillis = att.getInTime().getTime();
+                        long todayInMillis = today.getTime();
+                        long diffInMilliseconds = todayInMillis - inTimeInMillis;
+                        //                    long diffInHours = diffInMilliseconds / (1000);
+                        long diffInHours = TimeUnit.MILLISECONDS.toHours(diffInMilliseconds);
+                        attd.setAttendanceId(att.getAttendanceId());
+                        attd.setDate(att.getDate());
+                        attd.setTheEmployee(att.getTheEmployee());
+                        attd.setInTime(att.getInTime());
+                        attd.setOutTime(today);
+                        attd.setTotalTime(diffInHours);
+
+                        Attendance attObj1 = service.editAttendance(attd);
+                        if (attObj1 != null) {
+                            JOptionPane.showMessageDialog(this, "Check out complite");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Something wrong");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Already checked Out");
+                    }
+
+                }
+            } else if (attObj.size() == 0) {
+                JOptionPane.showMessageDialog(this, "It looks Like you did not check In");
+            } else {
+                JOptionPane.showMessageDialog(this, "Something Wrong");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jPanel11MouseClicked
+
+    void checkLogin() {
+        if (permissionsJText.getText().equals(null)) {
+            JOptionPane.showMessageDialog(this, "Login Fisrt");
+            System.exit(0);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -511,12 +638,13 @@ public class HRDashboardView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -526,6 +654,8 @@ public class HRDashboardView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -533,8 +663,8 @@ public class HRDashboardView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JSeparator jSeparator1;
+    public static javax.swing.JLabel permissionsJText;
     private javax.swing.JPanel sidepan;
     // End of variables declaration//GEN-END:variables
 }
